@@ -1,76 +1,79 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import { nanoid } from 'nanoid';
 import css from './Form.module.css';
 import PropTypes from 'prop-types';
 
-const INITIAL_STATE = {
-  name: '',
-  number: '',
-};
+export const ContactForm = ({ onSubmit }) => {
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
+  const [id, setId] = useState(null);
 
-export class ContactForm extends Component {
-  state = { ...INITIAL_STATE };
-
-  handleChange = e => {
+  const handleChange = e => {
     const { name, value } = e.currentTarget;
-    this.setState({ [name]: value });
-    this.createID();
+    const contactId = nanoid(4);
+    switch (name) {
+      case 'name':
+        setName(value);
+        break;
+
+      case 'number':
+        setNumber(value);
+        break;
+
+      default:
+        return;
+    }
+    setId(contactId);
   };
 
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    this.props.onSubmit({ ...this.state });
-    this.reset();
-  };
-  createID = () => {
-    const contactid = nanoid(4);
-    this.setState({ id: contactid });
+    onSubmit({ name, number, id });
+    reset();
   };
 
-  reset = () => {
-    this.setState({ ...INITIAL_STATE });
+  const reset = () => {
+    setName('');
+    setNumber('');
+    setId(null);
   };
 
-  render() {
-    const { id, name, number } = this.state;
-
-    return (
-      <form className={css.form} onSubmit={this.handleSubmit}>
-        <div className={css.field}>
-          <label className={css.label}>Name</label>
-          <input
-            className={css.input}
-            type="text"
-            name="name"
-            contactid={id}
-            value={name}
-            onChange={this.handleChange}
-            pattern="^[a-zA-Za-яА-Я]+(([' -][a-zA-Za-яА-Я ])?[a-zA-Za-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            required
-          />
-        </div>
-        <div className={css.field}>
-          <label className={css.label}>Number</label>
-          <input
-            className={css.input}
-            type="tel"
-            name="number"
-            contactid={id}
-            value={number}
-            onChange={this.handleChange}
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            required
-          />
-        </div>
-        <button className={css.btn__submit} type="submit">
-          Add contact
-        </button>
-      </form>
-    );
-  }
-}
+  return (
+    <form className={css.form} onSubmit={handleSubmit}>
+      <div className={css.field}>
+        <label className={css.label}>Name</label>
+        <input
+          className={css.input}
+          type="text"
+          name="name"
+          contactid={id}
+          value={name}
+          onChange={handleChange}
+          pattern="^[a-zA-Za-яА-Я]+(([' -][a-zA-Za-яА-Я ])?[a-zA-Za-яА-Я]*)*$"
+          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+          required
+        />
+      </div>
+      <div className={css.field}>
+        <label className={css.label}>Number</label>
+        <input
+          className={css.input}
+          type="tel"
+          name="number"
+          contactid={id}
+          value={number}
+          onChange={handleChange}
+          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+          required
+        />
+      </div>
+      <button className={css.btn__submit} type="submit">
+        Add contact
+      </button>
+    </form>
+  );
+};
 
 ContactForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,

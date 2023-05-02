@@ -3,7 +3,7 @@ import { ContactList } from '../List/List';
 import { Filter } from '../Filter/Filter';
 import css from './App.module.css';
 import { useState } from 'react';
-import useLocalStorage from '../useLocalStorage';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
 export default function App() {
   // state = {

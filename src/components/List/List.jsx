@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import css from './List.module.css';
 // import css from '../buttons/IconBtn/IconBtn.module.css';
-import { ReactComponent as DeleteIcon } from '../Icons/close.svg';
+import { ReactComponent as DeleteIcon } from '../../assets/close.svg';
 
 export const ContactList = ({ contacts, onDeleteContact }) => {
   return (

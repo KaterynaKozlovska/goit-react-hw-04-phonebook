@@ -6,11 +6,10 @@ import PropTypes from 'prop-types';
 export const ContactForm = ({ onSubmit }) => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-  const [id, setId] = useState(null);
 
   const handleChange = e => {
     const { name, value } = e.currentTarget;
-    const contactId = nanoid(4);
+
     switch (name) {
       case 'name':
         setName(value);
@@ -23,19 +22,19 @@ export const ContactForm = ({ onSubmit }) => {
       default:
         return;
     }
-    setId(contactId);
   };
 
   const handleSubmit = e => {
     e.preventDefault();
-    onSubmit({ name, number, id });
-    reset();
-  };
+    const contact = {
+      id: nanoid(6),
+      name,
+      number,
+    };
 
-  const reset = () => {
+    onSubmit(contact);
     setName('');
     setNumber('');
-    setId(null);
   };
 
   return (
@@ -46,7 +45,6 @@ export const ContactForm = ({ onSubmit }) => {
           className={css.input}
           type="text"
           name="name"
-          contactid={id}
           value={name}
           onChange={handleChange}
           pattern="^[a-zA-Za-яА-Я]+(([' -][a-zA-Za-яА-Я ])?[a-zA-Za-яА-Я]*)*$"
@@ -60,7 +58,6 @@ export const ContactForm = ({ onSubmit }) => {
           className={css.input}
           type="tel"
           name="number"
-          contactid={id}
           value={number}
           onChange={handleChange}
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
